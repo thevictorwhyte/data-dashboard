@@ -13,11 +13,18 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { signIn, signOut, useSession } from 'next-auth/react';
+import ThemeToggleButton from '../ThemeToggleButton/ThemeToggleButton';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 const pages = ['Products', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-const Header = () => {
+export type HeaderaProps = {
+  ColorModeContext: React.Context<{ toggleColorMode: () => void }>;
+};
+
+const Header = (props: HeaderaProps) => {
+  const { ColorModeContext } = props;
+  const tabletCheck = useMediaQuery('(min-width: 768px)');
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
@@ -61,7 +68,7 @@ const Header = () => {
               textDecoration: 'none',
             }}
           >
-            LOGO
+            DataSoft
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -117,7 +124,7 @@ const Header = () => {
               textDecoration: 'none',
             }}
           >
-            LOGO
+            DataSoft
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
@@ -131,9 +138,13 @@ const Header = () => {
             ))}
           </Box>
 
-          <Box sx={{ paddingRight: 5 }}>
-            <Typography>Signed in as {session?.user?.email}</Typography>
-          </Box>
+          {tabletCheck && (
+            <Box sx={{ paddingRight: 5 }}>
+              <Typography>Signed in as {session?.user?.email}</Typography>
+            </Box>
+          )}
+
+          <ThemeToggleButton ColorModeContext={ColorModeContext} />
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open profile settings">
